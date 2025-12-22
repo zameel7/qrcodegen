@@ -1,36 +1,128 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+<p align="center">
+  <img src="public/og-image.png" alt="QRapid - Fast QR Code Generator" width="100%">
+</p>
 
-## Getting Started
+# QRapid
 
-First, run the development server:
+**Fast • Dynamic • Secure** - A modern QR code generator for business and personal use.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## ✨ Features
+
+- **Static QR Codes** - Generate permanent QR codes that point directly to your URL
+- **Dynamic QR Codes** - Create updatable QR codes with scan tracking and analytics
+- **Scan Analytics** - Track how many times your dynamic QR codes are scanned
+- **Instant Generation** - Generate QR codes in seconds with a clean, intuitive interface
+- **Download & Share** - Download your QR codes as PNG images for printing or digital use
+- **User Authentication** - Secure Google Sign-In to manage your QR codes
+- **Subscription System** - Flexible plans for different usage needs
+
+## 🛠 Tech Stack
+
+- **Framework**: [Next.js 16](https://nextjs.org/) with App Router
+- **Language**: TypeScript
+- **Authentication**: Firebase Auth (Google Sign-In)
+- **Database**: Cloud Firestore
+- **QR Generation**: [qrcode](https://www.npmjs.com/package/qrcode)
+- **Icons**: [Remix Icons](https://remixicon.com/)
+- **Styling**: CSS Modules
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js 18+ 
+- npm, yarn, pnpm, or bun
+- Firebase project with Auth and Firestore enabled
+
+### Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/zameel7/qrcodegen.git
+   cd qrcodegen
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   # or
+   yarn install
+   # or
+   pnpm install
+   ```
+
+3. Set up environment variables:
+   
+   Create a `.env.local` file in the root directory:
+   ```env
+   NEXT_PUBLIC_FIREBASE_API_KEY=your_api_key
+   NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_auth_domain
+   NEXT_PUBLIC_FIREBASE_PROJECT_ID=your_project_id
+   NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your_storage_bucket
+   NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
+   NEXT_PUBLIC_FIREBASE_APP_ID=your_app_id
+   NEXT_PUBLIC_BASE_URL=http://localhost:3000
+   ```
+
+4. Run the development server:
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   # or
+   pnpm dev
+   ```
+
+5. Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+## 📁 Project Structure
+
+```
+qrcodegen/
+├── public/
+│   ├── favicon.ico
+│   ├── logo.png
+│   └── og-image.png
+├── src/
+│   ├── app/
+│   │   ├── dashboard/       # Main dashboard page
+│   │   ├── go/[id]/         # Dynamic QR redirect handler
+│   │   ├── login/           # Authentication page
+│   │   ├── plan/            # Subscription plans
+│   │   ├── qr/[id]/         # QR code viewer
+│   │   ├── globals.css
+│   │   ├── layout.tsx
+│   │   └── page.tsx         # Landing page
+│   ├── components/
+│   │   ├── QRGenerator.tsx  # QR code generation component
+│   │   └── QRHistory.tsx    # User's QR code history
+│   ├── contexts/
+│   │   └── AuthContext.tsx  # Authentication context
+│   └── lib/
+│       └── firebase.ts      # Firebase configuration
+├── firestore.rules
+├── package.json
+└── tsconfig.json
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 📱 Static vs Dynamic QR Codes
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Feature | Static QR | Dynamic QR |
+|---------|-----------|------------|
+| URL Change | ❌ No | ✅ Yes |
+| Scan Tracking | ❌ No | ✅ Yes |
+| Redirect | Direct | Through QRapid |
+| Use Case | Permanent links | Marketing, campaigns |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🔒 Firebase Security Rules
 
-## Learn More
+The project uses Firestore security rules (`firestore.rules`) to ensure users can only access their own QR codes. Make sure to deploy these rules to your Firebase project.
 
-To learn more about Next.js, take a look at the following resources:
+## 📄 License
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+This project is open source and available under the [MIT License](LICENSE).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🙏 Acknowledgments
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Built with ❤️ by [zameel7](https://github.com/zameel7)
+- Powered by [Next.js](https://nextjs.org/) and [Firebase](https://firebase.google.com/)
