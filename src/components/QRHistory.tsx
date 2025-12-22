@@ -136,30 +136,13 @@ export default function QRHistory() {
               <div className={styles.cardHeader}>
                 {qrCode.isDynamic ? (
                   <div className={styles.badge} title="Dynamic QR Code">
-                    <i className="ri-refresh-line"></i> Dynamic
+                    <i className="ri-refresh-line my-2"></i> Dynamic
                   </div>
                 ) : (
                   <div className={styles.staticBadge} title="Static QR Code">
-                    <i className="ri-pushpin-line"></i> Static
+                    <i className="ri-pushpin-line my-2"></i> Static
                   </div>
                 )}
-                
-                <div className={styles.headerActions}>
-                  {qrCode.isDynamic && qrCode.scanCount !== undefined && (
-                    <div className={styles.scanCount} title="Total Scans">
-                      <i className="ri-eye-line"></i> {qrCode.scanCount}
-                    </div>
-                  )}
-                  {qrCode.isDynamic && (
-                    <button 
-                      onClick={() => startEditing(qrCode)}
-                      className={styles.iconButton}
-                      title="Edit Destination URL"
-                    >
-                      <i className="ri-edit-line"></i>
-                    </button>
-                  )}
-                </div>
               </div>
 
               {qrCode.qrCodeDataUrl ? (
@@ -202,7 +185,21 @@ export default function QRHistory() {
                       <i className="ri-links-line"></i>
                     )}
                   </button>
+                  {qrCode.isDynamic && (
+                    <button 
+                      onClick={() => startEditing(qrCode)}
+                      className={styles.actionButton}
+                      title="Edit Destination URL"
+                    >
+                      <i className="ri-edit-line"></i>
+                    </button>
+                  )}
                 </div>
+                {qrCode.isDynamic && qrCode.scanCount !== undefined && (
+                  <div className={styles.scanCountLarge} title="Total Scans">
+                    <i className="ri-eye-line"></i> {qrCode.scanCount} scans
+                  </div>
+                )}
               </div>
             </div>
           ))}
