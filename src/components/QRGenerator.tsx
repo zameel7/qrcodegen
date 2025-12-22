@@ -1,19 +1,33 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import QRCode from 'qrcode';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { useAuth } from '@/contexts/AuthContext';
 import styles from './QRGenerator.module.css';
 
-export default function QRGenerator() {
-  const [url, setUrl] = useState('');
+interface Props {
+  initialUrl?: string;
+}
+
+export default function QRGenerator(props: Props) {
+  // Initialize with initialUrl if provided
+  const [url, setUrl] = useState(props.initialUrl || '');
+  
+  useEffect(() => {
+    if (props.initialUrl) {
+      setUrl(props.initialUrl);
+    }
+  }, [props.initialUrl]);
   const [qrCodeUrl, setQrCodeUrl] = useState('');
   const [loading, setLoading] = useState(false);
   const [isDynamic, setIsDynamic] = useState(true);
   const [generatedId, setGeneratedId] = useState('');
   const { user } = useAuth();
+  
+  // Initialize with initialUrl if provided
+
 
   const generateQRCode = async () => {
     if (!url.trim()) {

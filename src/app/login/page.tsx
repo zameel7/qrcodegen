@@ -11,7 +11,14 @@ export default function LoginPage() {
 
   useEffect(() => {
     if (user && !loading) {
-      router.push('/');
+      const searchParams = new URLSearchParams(window.location.search);
+      const pendingQr = searchParams.get('pendingQr');
+      
+      if (pendingQr) {
+        router.push(`/dashboard?create=${encodeURIComponent(pendingQr)}`);
+      } else {
+        router.push('/dashboard');
+      }
     }
   }, [user, loading, router]);
 
