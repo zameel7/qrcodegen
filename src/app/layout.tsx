@@ -18,17 +18,17 @@ const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: "QRapid - Fast QR Code Generator for Business & Personal Use",
-  description: "QRapid is a powerful and free QR code generator. Create, customize, and manage QR codes for all your personal and business needs. Generate static or dynamic QR codes instantly.",
+  description: "QRapid is a powerful and free QR code generator. Create and customize static or dynamic QR codes for all your personal and business needs.",
   icons: {
     icon: new URL("/favicon.ico", baseUrl).toString(),
     apple: new URL("/logo.png", baseUrl).toString(),
   },
   openGraph: {
     title: "QRapid - Fast QR Code Generator for Business & Personal Use",
-    description: "QRapid is a powerful and free QR code generator. Create, customize, and manage QR codes for all your personal and business needs. Generate static or dynamic QR codes instantly.",
+    description: "QRapid is a powerful and free QR code generator. Create and customize static or dynamic QR codes for all your personal and business needs.",
     images: [
       {
-        url: new URL("/og-image.png?v=2", baseUrl).toString(),
+        url: new URL("/og-image.png", baseUrl).toString(),
         width: 1200,
         height: 630,
         alt: "QRapid - Fast QR Code Generator",
@@ -40,7 +40,14 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "QRapid - Fast QR Code Generator for Business & Personal Use",
     description: "QRapid is a powerful and free QR code generator. Create, customize, and manage QR codes for all your personal and business needs. Generate static or dynamic QR codes instantly.",
-    images: [new URL("/og-image.png?v=2", baseUrl).toString()],
+    images: [
+      {
+        url: new URL("/og-image.png", baseUrl).toString(),
+        width: 1200,
+        height: 630,
+        alt: "QRapid - Fast QR Code Generator",
+      },
+    ],
   },
 };
 
