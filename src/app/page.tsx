@@ -39,7 +39,10 @@ export default function Home() {
     <div className={styles.page}>
       <header className={styles.header}>
         <div className={styles.headerContent}>
-          <h1 className={styles.logo}>QRapid</h1>
+          <div className={styles.logoContainer}>
+            <img src="/logo.png" alt="QRapid Logo" className={styles.logoImage} />
+            <h1 className={styles.logoText}>QRapid</h1>
+          </div>
           <div className={styles.userInfo}>
             <span className={styles.userName}>{user.displayName}</span>
             <button onClick={signOut} className={styles.signOutButton}>

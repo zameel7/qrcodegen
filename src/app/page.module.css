@@ -20,7 +20,19 @@
   align-items: center;
 }
 
-.logo {
+.logoContainer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logoImage {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
+.logoText {
   font-size: 1.75rem;
   font-weight: 700;
   color: #000;

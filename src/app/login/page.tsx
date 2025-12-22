@@ -34,7 +34,10 @@ export default function LoginPage() {
   return (
     <div className={styles.container}>
       <div className={styles.card}>
-        <h1 className={styles.title}>QR Code Generator</h1>
+        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1rem' }}>
+          <img src="/logo.png" alt="QRapid Logo" style={{ width: '64px', height: '64px', objectFit: 'contain' }} />
+        </div>
+        <h1 className={styles.title}>QRapid</h1>
         <p className={styles.subtitle}>Sign in to create and manage your QR codes</p>
         <button onClick={handleGoogleSignIn} className={styles.googleButton}>
           <svg className={styles.googleIcon} viewBox="0 0 24 24">

@@ -12,6 +12,10 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "QRapid - Fast QR Code Generator",
   description: "Generate and manage QR codes instantly with QRapid",
+  icons: {
+    icon: "/favicon.ico",
+    apple: "/logo.png",
+  },
 };
 
 export default function RootLayout({
