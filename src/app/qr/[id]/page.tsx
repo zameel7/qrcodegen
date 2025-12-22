@@ -2,14 +2,21 @@
 
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
+import Link from 'next/link';
+import Image from 'next/image';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import styles from './qr.module.css';
 
+interface QRData {
+  qrCodeDataUrl: string;
+  url: string;
+}
+
 export default function DynamicQRPage() {
   const params = useParams();
   const id = params.id as string;
-  const [qrData, setQrData] = useState<any>(null);
+  const [qrData, setQrData] = useState<QRData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -20,7 +27,7 @@ export default function DynamicQRPage() {
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
-          setQrData(docSnap.data());
+          setQrData(docSnap.data() as QRData);
         } else {
           setError('QR code not found');
         }
@@ -59,7 +66,7 @@ export default function DynamicQRPage() {
       <div className={styles.container}>
         <div className={styles.error}>
           <h1>❌ {error || 'QR code not found'}</h1>
-          <a href="/" className={styles.homeLink}>Go to Home</a>
+          <Link href="/" className={styles.homeLink}>Go to Home</Link>
         </div>
       </div>
     );
@@ -70,9 +77,11 @@ export default function DynamicQRPage() {
       <div className={styles.card}>
         <h1 className={styles.title}>QRapid</h1>
         <div className={styles.qrDisplay}>
-          <img 
+          <Image 
             src={qrData.qrCodeDataUrl} 
             alt="QR Code" 
+            width={300}
+            height={300}
             className={styles.qrImage}
           />
         </div>
@@ -91,9 +100,9 @@ export default function DynamicQRPage() {
           <button onClick={downloadQRCode} className={styles.downloadButton}>
             Download QR Code
           </button>
-          <a href="/" className={styles.createButton}>
+          <Link href="/" className={styles.createButton}>
             Create Your Own
-          </a>
+          </Link>
         </div>
       </div>
     </div>

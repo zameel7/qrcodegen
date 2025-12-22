@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import QRCode from 'qrcode';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
@@ -150,7 +151,7 @@ export default function QRGenerator(props: Props) {
 
       {qrCodeUrl && (
         <div className={styles.qrDisplay}>
-          <img src={qrCodeUrl} alt="QR Code" className={styles.qrImage} />
+          <Image src={qrCodeUrl} alt="QR Code" width={300} height={300} className={styles.qrImage} />
           <div className={styles.buttonGroup}>
             <button onClick={downloadQRCode} className={styles.downloadButton}>
               <i className="ri-download-2-line"></i> Download QR Code

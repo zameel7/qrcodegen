@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import styles from './page.module.css';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function LandingPage() {
   const [url, setUrl] = useState('');
@@ -30,7 +31,7 @@ export default function LandingPage() {
     <div className={styles.container}>
       <header className={styles.header}>
         <div className={styles.logoContainer}>
-          <img src="/logo.png" alt="QRapid Logo" className={styles.logoImage} />
+          <Image src="/logo.png" alt="QRapid Logo" width={64} height={64} className={styles.logoImage} />
           <h1 className={styles.logoText}>QRapid</h1>
         </div>
         <div className={styles.authButtons}>

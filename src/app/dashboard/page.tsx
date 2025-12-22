@@ -2,6 +2,7 @@
 
 import { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import Image from 'next/image';
 import { useAuth } from '@/contexts/AuthContext';
 import QRGenerator from '@/components/QRGenerator';
 import QRHistory from '@/components/QRHistory';
@@ -15,6 +16,7 @@ function DashboardContent() {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
   }, []);
 
@@ -46,7 +48,7 @@ function DashboardContent() {
       <header className={styles.header}>
         <div className={styles.headerContent}>
           <div className={styles.logoContainer}>
-            <img src="/logo.png" alt="QRapid Logo" className={styles.logoImage} />
+            <Image src="/logo.png" alt="QRapid Logo" width={48} height={48} className={styles.logoImage} />
             <h1 className={styles.logoText}>QRapid</h1>
           </div>
           <div className={styles.userInfo}>

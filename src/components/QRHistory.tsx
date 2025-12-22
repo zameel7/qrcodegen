@@ -1,7 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { collection, query, where, orderBy, onSnapshot, doc, updateDoc } from 'firebase/firestore';
+import Image from 'next/image';
+import { collection, query, where, orderBy, onSnapshot, doc, updateDoc, Timestamp } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { useAuth } from '@/contexts/AuthContext';
 import styles from './QRHistory.module.css';
@@ -10,7 +11,7 @@ interface QRCodeData {
   id: string;
   url: string;
   qrCodeDataUrl: string;
-  createdAt: any;
+  createdAt: Timestamp;
   isDynamic?: boolean;
   scanCount?: number;
 }
@@ -24,28 +25,32 @@ export default function QRHistory() {
   const { user } = useAuth();
 
   useEffect(() => {
+    let unsubscribe: (() => void) | undefined;
+
     if (!user) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setQrCodes([]);
       setLoading(false);
-      return;
+    } else {
+      const q = query(
+        collection(db, 'qrcodes'),
+        where('userId', '==', user.uid),
+        orderBy('createdAt', 'desc')
+      );
+
+      unsubscribe = onSnapshot(q, (snapshot) => {
+        const codes = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        } as QRCodeData));
+        setQrCodes(codes);
+        setLoading(false);
+      });
     }
 
-    const q = query(
-      collection(db, 'qrcodes'),
-      where('userId', '==', user.uid),
-      orderBy('createdAt', 'desc')
-    );
-
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const codes = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      } as QRCodeData));
-      setQrCodes(codes);
-      setLoading(false);
-    });
-
-    return unsubscribe;
+    return () => {
+      if (unsubscribe) unsubscribe();
+    };
   }, [user]);
 
   const downloadQRCode = (qrCodeDataUrl: string, url: string) => {
@@ -55,7 +60,8 @@ export default function QRHistory() {
     link.click();
   };
 
-  const copyShareLink = async (id: string, isDynamic?: boolean) => {
+  const copyShareLink = async (id: string) => {
+    // isDynamic is unused but kept for interface consistency or future checks
     const shareUrl = `${window.location.origin}/qr/${id}`;
     try {
       await navigator.clipboard.writeText(shareUrl);
@@ -96,7 +102,7 @@ export default function QRHistory() {
     }
   };
 
-  const formatDate = (timestamp: any) => {
+  const formatDate = (timestamp: Timestamp) => {
     if (!timestamp) return 'Just now';
     const date = timestamp.toDate();
     return date.toLocaleDateString('en-US', {
@@ -157,9 +163,11 @@ export default function QRHistory() {
               </div>
 
               {qrCode.qrCodeDataUrl ? (
-                <img 
+                <Image 
                   src={qrCode.qrCodeDataUrl} 
                   alt={`QR code for ${qrCode.url}`}
+                  width={200}
+                  height={200}
                   className={styles.qrImage}
                 />
               ) : (
@@ -184,7 +192,7 @@ export default function QRHistory() {
                     <i className="ri-download-2-line"></i>
                   </button>
                   <button 
-                    onClick={() => copyShareLink(qrCode.id, qrCode.isDynamic)}
+                    onClick={() => copyShareLink(qrCode.id)}
                     className={styles.actionButton}
                     title="Copy Share Link"
                   >

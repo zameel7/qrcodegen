@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { useAuth } from '@/contexts/AuthContext';
 import styles from './login.module.css';
 
@@ -47,7 +48,7 @@ export default function LoginPage() {
     <div className={styles.container}>
       <div className={styles.card}>
         <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1rem' }}>
-          <img src="/logo.png" alt="QRapid Logo" style={{ width: '64px', height: '64px', objectFit: 'contain' }} />
+          <Image src="/logo.png" alt="QRapid Logo" width={64} height={64} style={{ objectFit: 'contain' }} />
         </div>
         <h1 className={styles.title}>QRapid</h1>
         <p className={styles.subtitle}>Sign in to create and manage your QR codes</p>

@@ -125,9 +125,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       setIsSubscribed(true);
       return { success: true, message: 'Subscription activated successfully!' };
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Subscription error:', error);
-      return { success: false, message: error.message || 'Failed to activate subscription' };
+      const message = error instanceof Error ? error.message : 'Failed to activate subscription';
+      return { success: false, message };
     }
   };
 
