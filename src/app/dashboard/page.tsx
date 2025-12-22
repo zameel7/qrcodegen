@@ -14,11 +14,23 @@ function DashboardContent() {
   const searchParams = useSearchParams();
   const initialUrl = searchParams.get('create');
   const [mounted, setMounted] = useState(false);
+  const [showPendingNotification, setShowPendingNotification] = useState(false);
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
   }, []);
+
+  // Show pending link notification when there's an initialUrl
+  useEffect(() => {
+    if (mounted && initialUrl && user && isSubscribed) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setShowPendingNotification(true);
+      // Auto-hide after 8 seconds
+      const timer = setTimeout(() => setShowPendingNotification(false), 8000);
+      return () => clearTimeout(timer);
+    }
+  }, [mounted, initialUrl, user, isSubscribed]);
 
   useEffect(() => {
     if (mounted && !loading) {
@@ -61,6 +73,24 @@ function DashboardContent() {
       </header>
 
       <main className={styles.main}>
+        {showPendingNotification && initialUrl && (
+          <div className={styles.pendingNotification}>
+            <div className={styles.notificationContent}>
+              <i className="ri-information-line"></i>
+              <div className={styles.notificationText}>
+                <strong>Link ready to convert!</strong>
+                <p>Your URL has been pre-filled below. Click the <strong>Generate</strong> button to create your QR code.</p>
+              </div>
+              <button 
+                className={styles.notificationClose} 
+                onClick={() => setShowPendingNotification(false)}
+                aria-label="Close notification"
+              >
+                <i className="ri-close-line"></i>
+              </button>
+            </div>
+          </div>
+        )}
         <QRGenerator initialUrl={initialUrl || undefined} />
         <QRHistory />
       </main>

@@ -23,7 +23,7 @@ export default function QRGenerator(props: Props) {
   }, [props.initialUrl]);
   const [qrCodeUrl, setQrCodeUrl] = useState('');
   const [loading, setLoading] = useState(false);
-  const [isDynamic, setIsDynamic] = useState(true);
+  const [isDynamic, setIsDynamic] = useState(false);
   const [generatedId, setGeneratedId] = useState('');
   const { user } = useAuth();
   

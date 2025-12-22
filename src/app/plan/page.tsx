@@ -16,11 +16,12 @@ export default function PlanPage() {
   useEffect(() => {
     if (!loading && !user) {
       router.push('/login');
+    } else if (!loading && isSubscribed) {
+      router.push('/dashboard');
     }
-  }, [user, loading, router]);
+  }, [user, loading, router, isSubscribed]);
 
-  if (isSubscribed) {
-    router.push('/dashboard');
+  if (loading || isSubscribed) {
     return null;
   }
 
