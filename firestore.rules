@@ -1,0 +1,15 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // QR codes collection
+    // - Anyone can read QR codes (for dynamic QR generation and sharing)
+    // - Only authenticated users can create QR codes with their own userId
+    // - Only the owner can update/delete their QR codes
+    match /qrcodes/{qrcodeId} {
+      allow read: if true; // Public read access for sharing
+      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
+      allow update, delete: if request.auth != null && resource.data.userId == request.auth.uid;
+    }
+  }
+}
