@@ -52,14 +52,9 @@ export default function RedirectPage() {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-      color: 'white',
-      fontFamily: 'system-ui, sans-serif'
+      background: 'white',
     }}>
-      <div style={{ textAlign: 'center' }}>
-        <h1 style={{ fontSize: '2rem', marginBottom: '1rem' }}>Redirecting...</h1>
-        <p>Please wait while we redirect you to your destination.</p>
-      </div>
+      <div className="spinner"></div>
     </div>
   );
 }

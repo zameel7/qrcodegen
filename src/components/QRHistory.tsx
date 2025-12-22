@@ -56,9 +56,7 @@ export default function QRHistory() {
   };
 
   const copyShareLink = async (id: string, isDynamic?: boolean) => {
-    const shareUrl = isDynamic 
-      ? `${window.location.origin}/go/${id}`
-      : `${window.location.origin}/qr/${id}`;
+    const shareUrl = `${window.location.origin}/qr/${id}`;
     try {
       await navigator.clipboard.writeText(shareUrl);
       setCopiedId(id);
@@ -188,7 +186,7 @@ export default function QRHistory() {
                   <button 
                     onClick={() => copyShareLink(qrCode.id, qrCode.isDynamic)}
                     className={styles.actionButton}
-                    title={qrCode.isDynamic ? "Copy Dynamic Link" : "Copy Share Link"}
+                    title="Copy Share Link"
                   >
                     {copiedId === qrCode.id ? (
                       <i className="ri-check-line"></i>
