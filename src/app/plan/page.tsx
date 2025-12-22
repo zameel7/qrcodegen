@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import styles from './plan.module.css';
@@ -10,8 +10,14 @@ export default function PlanPage() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [submitting, setSubmitting] = useState(false);
-  const { user, subscribe, isSubscribed } = useAuth();
+  const { user, loading, subscribe, isSubscribed, signOut } = useAuth();
   const router = useRouter();
+
+  useEffect(() => {
+    if (!loading && !user) {
+      router.push('/login');
+    }
+  }, [user, loading, router]);
 
   if (isSubscribed) {
     router.push('/dashboard');
@@ -92,6 +98,13 @@ export default function PlanPage() {
             Contact Admin
           </a>
         </div>
+
+        <button 
+          onClick={() => signOut()} 
+          className={styles.logoutButton}
+        >
+          Sign Out
+        </button>
       </div>
     </div>
   );
