@@ -9,7 +9,14 @@ const inter = Inter({
   variable: "--font-inter",
 });
 
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL 
+  ? process.env.NEXT_PUBLIC_BASE_URL 
+  : process.env.VERCEL_URL 
+    ? `https://${process.env.VERCEL_URL}` 
+    : 'http://localhost:3000';
+
 export const metadata: Metadata = {
+  metadataBase: new URL(baseUrl),
   title: "QRapid - Fast QR Code Generator",
   description: "Generate and manage QR codes instantly with QRapid",
   icons: {
