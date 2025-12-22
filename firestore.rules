@@ -1,15 +1,54 @@
 rules_version = '2';
-
 service cloud.firestore {
   match /databases/{database}/documents {
-    // QR codes collection
-    // - Anyone can read QR codes (for dynamic QR generation and sharing)
-    // - Only authenticated users can create QR codes with their own userId
-    // - Only the owner can update/delete their QR codes
+    // Helper function to check if user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Helper to check if the user is accessing their own document
+    function isOwner(userId) {
+      return request.auth.uid == userId;
+    }
+
+    // Users Collection
+    match /users/{userId} {
+      allow read: if isAuthenticated() && isOwner(userId);
+      // Allow create/update only if it's the user's own document
+      allow write: if isAuthenticated() && isOwner(userId);
+    }
+
+    // Coupons Collection
+    match /coupons/{code} {
+      // Allow read to authenticated users to check validity
+      allow read: if isAuthenticated();
+      
+      // Allow write ONLY for redemption flow:
+      // 1. Must be authenticated
+      // 2. Must be an update (not create/delete*)
+      // 3. New 'isUsed' must be true
+      // 4. Old 'isUsed' must be false (prevent double use race condition check at rule level)
+      // 5. 'usedBy' must be the current user
+      allow update: if isAuthenticated()
+        && request.resource.data.isUsed == true
+        && resource.data.isUsed == false
+        && request.resource.data.usedBy == request.auth.uid;
+
+      // Other writes restricted to admin email
+      allow create: if isAuthenticated() && request.auth.token.email == 'zameelhassan7@gmail.com';
+      allow delete: if isAuthenticated() && request.auth.token.email == 'zameelhassan7@gmail.com';
+    }
+
+    // QR Codes Collection (Restored)
     match /qrcodes/{qrcodeId} {
       allow read: if true; // Public read access for sharing
-      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
-      allow update, delete: if request.auth != null && resource.data.userId == request.auth.uid;
+      allow create: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
+      allow update, delete: if isAuthenticated() && resource.data.userId == request.auth.uid;
+    }
+    
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
     }
   }
 }

@@ -6,11 +6,16 @@ import { useAuth } from '@/contexts/AuthContext';
 import styles from './login.module.css';
 
 export default function LoginPage() {
-  const { user, loading, signInWithGoogle } = useAuth();
+  const { user, loading, signInWithGoogle, isSubscribed } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
     if (user && !loading) {
+      if (!isSubscribed) {
+        router.push('/plan');
+        return;
+      }
+
       const searchParams = new URLSearchParams(window.location.search);
       const pendingQr = searchParams.get('pendingQr');
       
@@ -20,7 +25,7 @@ export default function LoginPage() {
         router.push('/dashboard');
       }
     }
-  }, [user, loading, router]);
+  }, [user, loading, router, isSubscribed]);
 
   const handleGoogleSignIn = async () => {
     try {

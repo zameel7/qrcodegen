@@ -7,20 +7,30 @@ import {
   signOut as firebaseSignOut,
   onAuthStateChanged 
 } from 'firebase/auth';
-import { auth, googleProvider } from '@/lib/firebase';
+import { 
+  doc, 
+  getDoc, 
+  setDoc, 
+  runTransaction 
+} from 'firebase/firestore';
+import { auth, googleProvider, db } from '@/lib/firebase';
 
-interface AuthContextType {
+export interface AuthContextType {
   user: User | null;
   loading: boolean;
+  isSubscribed: boolean;
   signInWithGoogle: () => Promise<void>;
   signOut: () => Promise<void>;
+  subscribe: (code: string) => Promise<{ success: boolean; message: string }>;
 }
 
 const AuthContext = createContext<AuthContextType>({
   user: null,
   loading: true,
+  isSubscribed: false,
   signInWithGoogle: async () => {},
   signOut: async () => {},
+  subscribe: async () => ({ success: false, message: 'Not implemented' }),
 });
 
 export const useAuth = () => useContext(AuthContext);
@@ -28,10 +38,33 @@ export const useAuth = () => useContext(AuthContext);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isSubscribed, setIsSubscribed] = useState(false);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
       setUser(user);
+      if (user) {
+        // Check subscription status
+        try {
+          const userDoc = await getDoc(doc(db, 'users', user.uid));
+          if (userDoc.exists()) {
+            setIsSubscribed(userDoc.data().isSubscribed || false);
+          } else {
+            // Create user doc if it doesn't exist
+            await setDoc(doc(db, 'users', user.uid), {
+              email: user.email,
+              isSubscribed: false,
+              createdAt: new Date().toISOString()
+            });
+            setIsSubscribed(false);
+          }
+        } catch (error) {
+          console.error("Error fetching user data:", error);
+          setIsSubscribed(false);
+        }
+      } else {
+        setIsSubscribed(false);
+      }
       setLoading(false);
     });
 
@@ -50,14 +83,56 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const signOut = async () => {
     try {
       await firebaseSignOut(auth);
+      setIsSubscribed(false);
     } catch (error) {
       console.error('Error signing out:', error);
       throw error;
     }
   };
 
+  const subscribe = async (code: string): Promise<{ success: boolean; message: string }> => {
+    if (!user) return { success: false, message: 'User not logged in' };
+
+    try {
+      const couponRef = doc(db, 'coupons', code);
+      const userRef = doc(db, 'users', user.uid);
+
+      // Using transaction to ensure atomicity
+      await runTransaction(db, async (transaction) => {
+        const couponDoc = await transaction.get(couponRef);
+        
+        if (!couponDoc.exists()) {
+          throw new Error('Invalid coupon code');
+        }
+
+        const couponData = couponDoc.data();
+        if (couponData.isUsed) {
+          throw new Error('Coupon code already used');
+        }
+
+        transaction.update(couponRef, {
+          isUsed: true,
+          usedBy: user.uid,
+          usedAt: new Date().toISOString()
+        });
+
+        transaction.update(userRef, {
+          isSubscribed: true,
+          couponUsed: code,
+          subscriptionDate: new Date().toISOString()
+        });
+      });
+
+      setIsSubscribed(true);
+      return { success: true, message: 'Subscription activated successfully!' };
+    } catch (error: any) {
+      console.error('Subscription error:', error);
+      return { success: false, message: error.message || 'Failed to activate subscription' };
+    }
+  };
+
   return (
-    <AuthContext.Provider value={{ user, loading, signInWithGoogle, signOut }}>
+    <AuthContext.Provider value={{ user, loading, isSubscribed, signInWithGoogle, signOut, subscribe }}>
       {children}
     </AuthContext.Provider>
   );
