@@ -62,13 +62,14 @@ export default function PlanPage() {
           <div className={styles.iconWrapper}>
             <i className="ri-shield-keyhole-line"></i>
           </div>
-          <h1 className={styles.title}>Access Restricted</h1>
+          <h1 className={styles.title}>Enter your access code</h1>
           <p className={styles.subtitle}>
             Enter your access code to proceed to the dashboard.
           </p>
         </div>
 
         <form onSubmit={handleSubmit} className={styles.form}>
+          <label htmlFor="coupon" className={styles.label}>Access code</label>
             <input
               id="coupon"
               type="text"
@@ -81,8 +82,8 @@ export default function PlanPage() {
               autoComplete="off"
             />
 
-          {error && <div className={styles.error}>{error}</div>}
-          {success && <div className={styles.success}>{success}</div>}
+          {error && <div className={styles.error} role="alert">{error}</div>}
+          {success && <div className={styles.success} role="status">{success}</div>}
 
           <button 
             type="submit" 
