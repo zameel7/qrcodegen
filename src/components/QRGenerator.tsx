@@ -15,7 +15,7 @@ interface Props {
 export default function QRGenerator(props: Props) {
   // Initialize with initialUrl if provided
   const [url, setUrl] = useState(props.initialUrl || '');
-  
+
   useEffect(() => {
     if (props.initialUrl) {
       setUrl(props.initialUrl);
@@ -26,7 +26,7 @@ export default function QRGenerator(props: Props) {
   const [isDynamic, setIsDynamic] = useState(false);
   const [generatedId, setGeneratedId] = useState('');
   const { user } = useAuth();
-  
+
   // Initialize with initialUrl if provided
 
 
@@ -105,8 +105,9 @@ export default function QRGenerator(props: Props) {
 
   return (
     <div className={styles.container}>
+      <p className={styles.eyebrow}>FROM LINK TO LIFE</p>
       <h2 className={styles.title}>Generate QR Code</h2>
-      
+
       <div className={styles.toggleContainer}>
         <label className={styles.toggleLabel}>
           <input
@@ -125,14 +126,16 @@ export default function QRGenerator(props: Props) {
           </span>
         </label>
         <p className={styles.toggleDescription}>
-          {isDynamic 
-            ? 'QR code can be updated later - scans redirect through your link' 
+          {isDynamic
+            ? 'QR code can be updated later - scans redirect through your link'
             : 'QR code points directly to URL - cannot be changed'}
         </p>
       </div>
 
+      <label htmlFor="destination-url" className={styles.label}>Destination URL</label>
       <div className={styles.inputGroup}>
         <input
+          id="destination-url"
           type="url"
           value={url}
           onChange={(e) => setUrl(e.target.value)}
@@ -140,8 +143,8 @@ export default function QRGenerator(props: Props) {
           className={styles.input}
           onKeyPress={(e) => e.key === 'Enter' && generateQRCode()}
         />
-        <button 
-          onClick={generateQRCode} 
+        <button
+          onClick={generateQRCode}
           disabled={loading}
           className={styles.generateButton}
         >

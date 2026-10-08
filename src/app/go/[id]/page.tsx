@@ -4,6 +4,8 @@ import { useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { doc, getDoc, updateDoc, increment } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
+import AppShell from '@/components/ui/AppShell';
+import styles from './go.module.css';
 
 export default function RedirectPage() {
   const params = useParams();
@@ -47,14 +49,21 @@ export default function RedirectPage() {
   }, [id, router]);
 
   return (
-    <div style={{
-      minHeight: '100vh',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      background: 'white',
-    }}>
-      <div className="spinner"></div>
-    </div>
+    <AppShell>
+      <div className={styles.container}>
+        <div className={styles.card} role="status">
+          <p className={styles.eyebrow}>ONE SCAN. NEXT STOP.</p>
+          <div className={styles.pixels} aria-hidden="true">
+            <span />
+            <span />
+            <span />
+            <span />
+            <span />
+          </div>
+          <h1>Taking you there.</h1>
+          <p>Opening your QR code’s destination…</p>
+        </div>
+      </div>
+    </AppShell>
   );
 }

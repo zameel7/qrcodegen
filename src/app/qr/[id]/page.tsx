@@ -6,6 +6,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
+import AppShell, { LoadingSkeleton } from '@/components/ui/AppShell';
 import styles from './qr.module.css';
 
 interface QRData {
@@ -55,56 +56,62 @@ export default function DynamicQRPage() {
 
   if (loading) {
     return (
-      <div className={styles.container}>
-        <div className={styles.loading}>Loading QR code...</div>
-      </div>
+      <AppShell>
+        <LoadingSkeleton label="Loading QR code…" />
+      </AppShell>
     );
   }
 
   if (error || !qrData) {
     return (
-      <div className={styles.container}>
-        <div className={styles.error}>
-          <h1>❌ {error || 'QR code not found'}</h1>
-          <Link href="/" className={styles.homeLink}>Go to Home</Link>
+      <AppShell>
+        <div className={styles.container}>
+          <div className={styles.error}>
+            <i className="ri-qr-code-line" aria-hidden="true" />
+            <h1>{error || 'QR code not found'}</h1>
+            <Link href="/" className={styles.homeLink}>Go to Home</Link>
+          </div>
         </div>
-      </div>
+      </AppShell>
     );
   }
 
   return (
-    <div className={styles.container}>
-      <div className={styles.card}>
-        <h1 className={styles.title}>QRapid</h1>
-        <div className={styles.qrDisplay}>
-          <Image 
-            src={qrData.qrCodeDataUrl} 
-            alt="QR Code" 
-            width={300}
-            height={300}
-            className={styles.qrImage}
-          />
-        </div>
-        <div className={styles.info}>
-          <p className={styles.label}>Original URL:</p>
-          <a 
-            href={qrData.url} 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className={styles.url}
-          >
-            {qrData.url}
-          </a>
-        </div>
-        <div className={styles.actions}>
-          <button onClick={downloadQRCode} className={styles.downloadButton}>
-            Download QR Code
-          </button>
-          <Link href="/" className={styles.createButton}>
-            Create Your Own
-          </Link>
+    <AppShell>
+      <div className={styles.container}>
+        <div className={styles.card}>
+          <p className={styles.eyebrow}>PRINT. SCAN. REPEAT.</p>
+          <h1 className={styles.title}>QRapid</h1>
+          <div className={styles.qrDisplay}>
+            <Image
+              src={qrData.qrCodeDataUrl}
+              alt="QR Code"
+              width={300}
+              height={300}
+              className={styles.qrImage}
+            />
+          </div>
+          <div className={styles.info}>
+            <p className={styles.label}>Original URL:</p>
+            <a
+              href={qrData.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.url}
+            >
+              {qrData.url}
+            </a>
+          </div>
+          <div className={styles.actions}>
+            <button onClick={downloadQRCode} className={styles.downloadButton}>
+              Download QR Code
+            </button>
+            <Link href="/" className={styles.createButton}>
+              Create Your Own
+            </Link>
+          </div>
         </div>
       </div>
-    </div>
+    </AppShell>
   );
 }

@@ -1,24 +1,106 @@
-.container { --paper: #fffbf2; --ink: #111; --muted: #515149; --panel: #fff; display: flex; min-height: 100vh; align-items: center; justify-content: center; background-color: var(--paper); background-image: radial-gradient(#8886 1px, transparent 1px); background-size: 20px 20px; color: var(--ink); padding: 32px 16px; }
-.card { width: 100%; max-width: 440px; background: var(--panel); padding: 32px 22px; border: 3px solid var(--ink); border-radius: 14px; box-shadow: 6px 6px 0 var(--ink); text-align: center; }
-.header { margin-bottom: 28px; }
-.iconWrapper { width: 64px; height: 64px; background: #c6ff3d; color: #111; border: 3px solid var(--ink); border-radius: 10px; box-shadow: 4px 4px 0 var(--ink); display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; }
-.iconWrapper i { font-size: 30px; }
-.title { font-size: 1.8rem; font-weight: 800; letter-spacing: -0.06em; line-height: 1.15; margin-bottom: 12px; }
-.subtitle { font-size: 0.925rem; color: var(--muted); line-height: 1.6; }
-.form { display: flex; flex-direction: column; gap: 16px; }
-.label { font-size: 0.85rem; font-weight: 700; text-align: left; }
-.input { width: 100%; padding: 14px 12px; border: 3px solid var(--ink); border-radius: 8px; font: inherit; font-size: 1.1rem; text-align: center; font-weight: 600; letter-spacing: 2px; background: var(--paper); color: var(--ink); text-transform: uppercase; }
-.input::placeholder { color: var(--muted); opacity: 1; }
-.container :is(input, button, a):focus-visible { outline: 3px solid var(--ink); outline-offset: 5px; }
-.button { width: 100%; padding: 14px; background: #c6ff3d; color: #111; border: 3px solid var(--ink); border-radius: 10px; box-shadow: 4px 4px 0 var(--ink); font-weight: 700; font-size: 1rem; cursor: pointer; transition: transform 150ms, box-shadow 150ms; }
-.button:hover:not(:disabled) { transform: translate(2px, 2px); box-shadow: 2px 2px 0 var(--ink); }
-.button:active:not(:disabled) { transform: translate(4px, 4px); box-shadow: none; }
-.button:disabled { opacity: 0.55; cursor: not-allowed; }
-.error, .success { font-size: 0.875rem; padding: 12px; border: 2px solid currentColor; border-radius: 8px; text-align: left; line-height: 1.5; }
-.error { color: #942314; background: #fff0e9; }
-.success { color: #22532d; background: #e7ffda; }
-.footer { margin-top: 28px; font-size: 0.875rem; color: var(--muted); }
-.link { color: var(--ink); text-decoration: underline; text-underline-offset: 4px; font-weight: 700; margin-left: 4px; }
-.logoutButton { margin-top: 18px; background: none; border: none; color: var(--muted); font-size: 0.875rem; cursor: pointer; text-decoration: underline; text-underline-offset: 4px; padding: 8px; }
-@media (prefers-color-scheme: dark) { .container { --paper: #111; --ink: #fffbf2; --muted: #c6c4bb; --panel: #1d1d1b; } }
-@media (prefers-reduced-motion: reduce) { .container * { animation: none !important; transition: none !important; } .button:is(:hover, :active) { transform: none; } }
+.container {
+  min-height: 65vh;
+  display: grid;
+  place-items: center;
+  padding-block: 28px;
+  background-image: radial-gradient(var(--muted) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+.card {
+  composes: panel from '../../components/ui/AppShell.module.css';
+  width: 100%;
+  max-width: 480px;
+  text-align: center;
+}
+
+.header {
+  margin-bottom: 28px;
+}
+
+.eyebrow {
+  composes: eyebrow from '../../components/ui/AppShell.module.css';
+  justify-content: center;
+}
+
+.iconWrapper {
+  width: 64px;
+  height: 64px;
+  background: var(--lime);
+  color: #111;
+  border: 3px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  display: grid;
+  place-items: center;
+  margin: 24px auto;
+  font-size: 30px;
+}
+
+.title {
+  font-size: clamp(2rem, 5vw, 2.7rem);
+  margin-bottom: 14px;
+}
+
+.subtitle {
+  color: var(--muted);
+  font-size: 0.925rem;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-align: left;
+}
+
+.input {
+  composes: input from '../../components/ui/AppShell.module.css';
+  text-align: center;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.button {
+  composes: button from '../../components/ui/AppShell.module.css';
+  width: 100%;
+}
+
+.error, .success {
+  font-size: 0.875rem;
+  padding: 12px;
+  border: 2px solid currentColor;
+  border-radius: 8px;
+  text-align: left;
+  overflow-wrap: anywhere;
+}
+
+.error {
+  color: #942314;
+  background: #fff0e9;
+}
+
+.success {
+  color: #22532d;
+  background: #e7ffda;
+}
+
+.footer {
+  margin-top: 28px;
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+.link {
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  font-weight: 700;
+  margin-left: 4px;
+}
