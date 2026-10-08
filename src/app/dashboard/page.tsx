@@ -2,7 +2,7 @@
 
 import { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import Image from 'next/image';
+import AppShell, { LoadingSkeleton } from '@/components/ui/AppShell';
 import { useAuth } from '@/contexts/AuthContext';
 import QRGenerator from '@/components/QRGenerator';
 import QRHistory from '@/components/QRHistory';
@@ -45,9 +45,9 @@ function DashboardContent() {
   // Don't render anything until mounted to avoid hydration mismatch
   if (!mounted || loading) {
     return (
-      <div className={styles.loading}>
-        <p>Loading...</p>
-      </div>
+      <AppShell>
+        <LoadingSkeleton label="Loading your dashboard…" />
+      </AppShell>
     );
   }
 
@@ -56,33 +56,23 @@ function DashboardContent() {
   }
 
   return (
-    <div className={styles.page}>
-      <header className={styles.header}>
-        <div className={styles.headerContent}>
-          <div className={styles.logoContainer}>
-            <Image src="/logo.png" alt="QRapid Logo" width={48} height={48} className={styles.logoImage} />
-            <h1 className={styles.logoText}>QRapid</h1>
-          </div>
-          <div className={styles.userInfo}>
-            <span className={styles.userName}>{user.displayName}</span>
-            <button onClick={signOut} className={styles.signOutButton}>
-              Sign Out
-            </button>
-          </div>
+    <AppShell userName={user.displayName} onSignOut={signOut}>
+      <div className={styles.main}>
+        <div className={styles.intro}>
+          <p className={styles.eyebrow}>YOUR PIXEL WORKSPACE</p>
+          <h1>Good links start here.</h1>
+          <p>Create a code, make it yours, and keep every link in one place.</p>
         </div>
-      </header>
-
-      <main className={styles.main}>
         {showPendingNotification && initialUrl && (
-          <div className={styles.pendingNotification}>
+          <div className={styles.pendingNotification} role="status">
             <div className={styles.notificationContent}>
               <i className="ri-information-line"></i>
               <div className={styles.notificationText}>
                 <strong>Link ready to convert!</strong>
                 <p>Your URL has been pre-filled below. Click the <strong>Generate</strong> button to create your QR code.</p>
               </div>
-              <button 
-                className={styles.notificationClose} 
+              <button
+                className={styles.notificationClose}
                 onClick={() => setShowPendingNotification(false)}
                 aria-label="Close notification"
               >
@@ -93,14 +83,20 @@ function DashboardContent() {
         )}
         <QRGenerator initialUrl={initialUrl || undefined} />
         <QRHistory />
-      </main>
-    </div>
+      </div>
+    </AppShell>
   );
 }
 
 export default function Home() {
   return (
-    <Suspense fallback={<div className={styles.loading}><p>Loading...</p></div>}>
+    <Suspense
+      fallback={
+        <AppShell>
+          <LoadingSkeleton label="Loading your dashboard…" />
+        </AppShell>
+      }
+    >
       <DashboardContent />
     </Suspense>
   );

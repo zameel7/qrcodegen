@@ -1,0 +1,56 @@
+.container {
+  min-height: 65vh;
+  display: grid;
+  place-items: center;
+}
+
+.card {
+  composes: panel from '../../../components/ui/AppShell.module.css';
+  width: 100%;
+  max-width: 520px;
+  text-align: center;
+}
+
+.eyebrow {
+  composes: eyebrow from '../../../components/ui/AppShell.module.css';
+  justify-content: center;
+}
+
+.card h1 {
+  font-size: clamp(2.2rem, 6vw, 3rem);
+  margin-bottom: 16px;
+}
+
+.card > p:last-child {
+  color: var(--muted);
+}
+
+.pixels {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  padding-block: 30px;
+}
+
+.pixels span {
+  width: 24px;
+  height: 24px;
+  background: var(--lime);
+  border: 3px solid var(--line);
+  animation: pixel 1s ease-in-out infinite alternate;
+}
+
+.pixels span:nth-child(2n) {
+  background: var(--orange);
+  animation-delay: 200ms;
+}
+
+.pixels span:nth-child(3) {
+  animation-delay: 400ms;
+}
+
+@keyframes pixel {
+  to {
+    transform: translateY(-8px);
+  }
+}

@@ -1,10 +1,4 @@
 .container {
-  --paper: #fffbf2;
-  --ink: #111111;
-  --muted: #515149;
-  --panel: #ffffff;
-  --lime: #c6ff3d;
-  --line: #111111;
   color: var(--ink);
   background: var(--paper);
   min-height: 100vh;
@@ -132,7 +126,6 @@
   .faqSection { display: grid; grid-template-columns: 0.8fr 1.2fr; gap: 40px; }
 }
 @media (prefers-color-scheme: dark) {
-  .container { --paper: #111; --ink: #fffbf2; --muted: #c6c4bb; --panel: #1d1d1b; --line: #fffbf2; }
   .brandDot { color: #ff7759; }
   .finalCta .eyebrow { color: #111; }
 }
